@@ -18,7 +18,24 @@ class Card(object):
         self.pointVal = pointVal
         self.action   = action
 
-                                
+
+class Deck(object):
+    def __init__(self):
+        self.deck = {}
+        
+        #Treasure cards
+        self.gold   = gold()
+        self.silver = silver()
+        self.copper = copper()
+        
+        #Victory cards
+        self.province = province()
+        self.duchy    = duchy()
+        self.estate   = estate()
+
+        
+        
+        
 #methods to create cards (avoid globals)
 
 #Treasure cards
