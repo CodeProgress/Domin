@@ -9,11 +9,26 @@ class Game(object):
         
         #to be continued
         
-    def action_phase(self):
+        self.gameDeck = cards.Deck()
+   
+    def action_phase(self, player):
         pass
     
-    def buy_phase(self):
+    def buy_phase(self, player):
         pass
     
-    def cleanup_phase(self):
+    def cleanup_phase(self, player):
         pass
+    
+    def turn(self, player):
+        self.action_phase(player)
+        self.buy_phase(player)
+        self.clean_up(player)
+
+    def is_end_of_game(self):
+        assert self.gameDeck.deck['province'] >= 0
+
+        return self.gameDeck.deck['province'] == 0
+    
+    
+
