@@ -16,11 +16,11 @@ class Card(object):
         self.cardType = cardType
         self.coinVal  = coinVal
         self.pointVal = pointVal
-        self.action   = action
+        self.action   = action     #function
 
 
 class Deck(object):
-    def __init__(self):
+    def __init__(self, numPlayers):
         self.deck = {}
         
         #Treasure cards
@@ -33,6 +33,18 @@ class Deck(object):
         self.duchy    = duchy()
         self.estate   = estate()
 
+        if numPlayers > 3:
+            numTreasure = 12
+        else:
+            numTreasure = 8
+        
+        self.deck[self.gold.name]   = 30
+        self.deck[self.silver.name] = 40
+        self.deck[self.copper.name] = 60
+
+        self.deck[self.province.name] = numTreasure
+        self.deck[self.duchy.name]    = numTreasure
+        self.deck[self.estate.name]   = numTreasure
         
         
         
