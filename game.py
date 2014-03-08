@@ -3,14 +3,23 @@ import player
 
 class Game(object):
     def __init__(self, numPlayers):
+        self.numPlayers = numPlayers
+
         self.players = []
         for i in range(numPlayers):
             self.players.append(player.Player())
+
+        self.gameDeck = cards.Deck()
+        
+        self.playerToMoveNext = 0
         
         #to be continued
+    
+    def incr_player_to_move_next(self):
+        self.player += 1
+        self.player %= self.numPlayers
         
-        self.gameDeck = cards.Deck()
-   
+        
     def action_phase(self, player):
         pass
     
@@ -26,9 +35,8 @@ class Game(object):
         self.clean_up(player)
 
     def is_end_of_game(self):
-        assert self.gameDeck.deck['province'] >= 0
-
-        return self.gameDeck.deck['province'] == 0
+        return self.gameDeck.deck['province'] == 0 \
+                or self.gameDeck.numEmptyPiles >= 3
     
     
 
