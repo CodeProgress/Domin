@@ -20,8 +20,9 @@ class Card(object):
 
 
 class Deck(object):
-    def __init__(self, numPlayers):
+    def __init__(self, numPlayers = 2):
         self.deck = {}
+        self.numEmptyPiles = 0
         
         #Treasure cards
         self.gold   = gold()
@@ -45,6 +46,17 @@ class Deck(object):
         self.deck[self.province.name] = numTreasure
         self.deck[self.duchy.name]    = numTreasure
         self.deck[self.estate.name]   = numTreasure
+    
+    def rem_one_card(self, cardName):
+        """subtracts 1 card from cardName pile in deck
+        if remaining pile is empty, cardName is deleted from deck and
+        self.numEmptyPiles is incremented by 1
+        """
+        assert cardName in self.deck
+        self.deck[cardName] -= 1
+        if self.deck[cardName] == 0:
+            self.deck.pop(cardName)
+            self.numEmptyPiles += 1
         
         
         
