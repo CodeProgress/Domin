@@ -33,4 +33,16 @@ class Player(object):
     # played_to_discard
     # discard_to_deck
     # 
+    
+    def act(self, action):
+        action()
+        self.numActions -= 1
+    
+    def buy(self, card):
+        assert self.numBuys > 0 and self.numCoins >= card.cost
+        self.discard[card.name] += 1
+        self.numCoins -= card.cost
+        
+        
+        
         
