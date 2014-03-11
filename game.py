@@ -5,9 +5,10 @@ class Game(object):
     def __init__(self, numPlayers):
         self.numPlayers = numPlayers
 
+        startingDeck = ["estate"]*3 + ["copper"]*7
         self.players = []
         for i in range(numPlayers):
-            self.players.append(player.Player())
+            self.players.append(player.Player("Player" + str(i), startingDeck))
 
         self.gameDeck = cards.Deck()
         
@@ -24,12 +25,21 @@ class Game(object):
         pass
     
     def buy_phase(self, player):
-        pass
+        while player.numBuys > 0:
+            # availCards = #fast look up, possibly heapq
+            cardName = raw_input("Which card would you like to buy?")
+            try:
+                self.gameDeck.rem_one_card(self, cardName)
+                player.buy(cardName)
+            except:
+                print "That card is not in the deck"
+            
     
     def cleanup_phase(self, player):
         pass
     
     def turn(self, player):
+        player.init_turn()
         self.action_phase(player)
         self.buy_phase(player)
         self.clean_up(player)
@@ -38,5 +48,6 @@ class Game(object):
         return self.gameDeck.deck['province'] == 0 \
                 or self.gameDeck.numEmptyPiles >= 3
     
-    
+
+domin = Game(2)
 
