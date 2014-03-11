@@ -34,6 +34,13 @@ class Player(object):
     # discard_to_deck
     # 
     
+    def init_turn(self):
+        #deck_to_hand
+        self.numActions = 1
+        self.numBuys    = 1
+        self.numCoins   = 0
+        self.numPoints  = 0
+    
     def act(self, action):
         action()
         self.numActions -= 1
@@ -42,6 +49,7 @@ class Player(object):
         assert self.numBuys > 0 and self.numCoins >= card.cost
         self.discard[card.name] += 1
         self.numCoins -= card.cost
+        self.numBuys -= 1
         
         
         
