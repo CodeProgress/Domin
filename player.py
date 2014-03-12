@@ -1,5 +1,6 @@
 
 import collections
+import random
 
 class Player(object):
     def __init__(self, name, startingDeck):
@@ -34,8 +35,13 @@ class Player(object):
     # discard_to_deck
     # 
     
-    def init_turn(self):
-        #deck_to_hand
+    def init_turn(self, numToDraw = 5):
+        try:
+            self.move_random_cards(self.deck, self.hand, numToDraw)
+        except:
+            self.move_all_cards(self.discard, self.deck, numToDraw)
+            self.move_random_cards(self.deck, self.hand, numToDraw)
+            
         self.numActions = 1
         self.numBuys    = 1
         self.numCoins   = 0
@@ -48,6 +54,7 @@ class Player(object):
     def buy(self, card):
         assert self.numBuys > 0 and self.numCoins >= card.cost
         self.discard[card.name] += 1
+        self.allCards[card.name] += 1
         self.numCoins -= card.cost
         self.numBuys -= 1
     
@@ -57,6 +64,16 @@ class Player(object):
         """
         toPile.update(fromPile)
         fromPile.clear()
+    
+    def move_random_cards(fromPile, toPile, numRandom):
+        """Moves all cards from "fromPile" to "toPile"
+        fromPile, toPile: collections.Coutner()
+        """
+        assert len(list(fromPile.elements())) >= numRandom
+        for i in range(numRandom):
+            toMove = random.choice(fromPile.elements())
+            toPile.update(toMove)
+            fromPile.subtract(toMove)
     
     def cleanup(self):
         self.move_all_cards(self.hand,   self.discard)
