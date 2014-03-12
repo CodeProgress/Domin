@@ -38,26 +38,39 @@ class Deck(object):
             numTreasure = 12
         else:
             numTreasure = 8
-        
-        self.deck[self.gold.name]   = 30
-        self.deck[self.silver.name] = 40
-        self.deck[self.copper.name] = 60
 
-        self.deck[self.province.name] = numTreasure
-        self.deck[self.duchy.name]    = numTreasure
-        self.deck[self.estate.name]   = numTreasure
+        self.deck[self.gold.name]   = [30, self.gold]
+        self.deck[self.silver.name] = [40, self.silver]
+        self.deck[self.copper.name] = [60, self.copper]
+
+        self.deck[self.province.name] = [numTreasure, self.province]
+        self.deck[self.duchy.name]    = [numTreasure, self.duchy]
+        self.deck[self.estate.name]   = [numTreasure, self.estate]
     
     def rem_one_card(self, cardName):
         """subtracts 1 card from cardName pile in deck
         if remaining pile is empty, cardName is deleted from deck and
         self.numEmptyPiles is incremented by 1
         """
-        assert cardName in self.deck
-        self.deck[cardName] -= 1
-        if self.deck[cardName] == 0:
-            self.deck.pop(cardName)
-            self.numEmptyPiles += 1
-        
+        if cardName in self.deck:
+            self.deck[cardName][0] -= 1
+            if self.get_card_count(cardName) == 0:
+                self.deck.pop(cardName)
+                self.numEmptyPiles += 1
+        else:
+            raise NameError("Card {} does not exist".format(cardName))
+    
+    def get_card_count(self, cardName):
+        if cardName in self.deck:
+            return self.deck[cardName][0]
+        else:
+            raise NameError("Card {} does not exist".format(cardName))
+    
+    def get_card(self, cardName):
+        if cardName in self.deck:
+            return self.deck[cardName][1]
+        else:
+            raise NameError("Card {} does not exist".format(cardName))
         
         
 #methods to create cards (avoid globals)
