@@ -50,7 +50,15 @@ class Player(object):
         self.discard[card.name] += 1
         self.numCoins -= card.cost
         self.numBuys -= 1
-        
-        
-        
+    
+    def move_all_cards(fromPile, toPile):
+        """Moves all cards from "fromPile" to "toPile"
+        fromPile, toPile: collections.Coutner()
+        """
+        toPile.update(fromPile)
+        fromPile.clear()
+    
+    def cleanup(self):
+        self.move_all_cards(self.hand,   self.discard)
+        self.move_all_cards(self.played, self.discard)
         
