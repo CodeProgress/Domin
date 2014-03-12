@@ -27,16 +27,23 @@ class Game(object):
     def buy_phase(self, player):
         while player.numBuys > 0:
             # availCards = #fast look up, possibly heapq
-            cardName = raw_input("Which card would you like to buy?")
+            cardName = raw_input("Which card would you like to buy? ")
+            cardName.lower()
             try:
-                self.gameDeck.rem_one_card(self, cardName)
-                player.buy(cardName)
+                self.gameDeck.rem_one_card(cardName)
             except:
-                print "That card is not in the deck"
+                print "{} is not in the deck".format(cardName)
+            
+            try:
+                card = self.gameDeck.get_card(cardName)
+                player.buy(card)
+                print "{} successfully purchased".format(cardName)
+            except AssertionError:
+                print "Insufficient funds / no more buys"
             
     
     def cleanup_phase(self, player):
-        pass
+        player.cleanup()
     
     def turn(self, player):
         player.init_turn()
@@ -45,9 +52,10 @@ class Game(object):
         self.clean_up(player)
 
     def is_end_of_game(self):
-        return self.gameDeck.deck['province'] == 0 \
+        return self.gameDeck.get_card_count("province") == 0 \
                 or self.gameDeck.numEmptyPiles >= 3
     
 
 domin = Game(2)
-
+domin.players[0].numCoins = 2
+domin.buy_phase(domin.players[0])
