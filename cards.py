@@ -61,12 +61,20 @@ class Deck(object):
             raise NameError("Card {} does not exist".format(cardName))
     
     def get_card_count(self, cardName):
+        """Returns the number of cards in the deck named cardName
+        cardName: String
+        If cardName not in deck, raises NameError
+        """
         if cardName in self.deck:
             return self.deck[cardName][0]
         else:
             raise NameError("Card {} does not exist".format(cardName))
     
     def get_card(self, cardName):
+        """Returns the card object
+        cardName:  String
+        If cardName not in deck, raises NameError
+        """
         if cardName in self.deck:
             return self.deck[cardName][1]
         else:
