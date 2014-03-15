@@ -46,6 +46,10 @@ class Deck(object):
         self.deck[self.province.name] = [numTreasure, self.province]
         self.deck[self.duchy.name]    = [numTreasure, self.duchy]
         self.deck[self.estate.name]   = [numTreasure, self.estate]
+        
+        self.cardsByCost = self.create_cards_by_cost()
+        
+        #self.allCardsBelow = {}
     
     def rem_one_card(self, cardName):
         """subtracts 1 card from cardName pile in deck
@@ -79,6 +83,19 @@ class Deck(object):
             return self.deck[cardName][1]
         else:
             raise NameError("Card {} does not exist".format(cardName))
+
+    def create_cards_by_cost(self):
+        cardsByCost = {}
+        for i in self.deck.values():
+            card = i[1]
+            if card.cost in cardsByCost:
+                cardsByCost[card.cost].append(card.name)
+            else:
+                cardsByCost[card.cost] = [card.name]
+        return cardsByCost
+        
+    def create_all_cards_below(self):
+        pass
         
         
 #methods to create cards (avoid globals)
