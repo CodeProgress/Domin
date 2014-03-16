@@ -49,7 +49,7 @@ class Deck(object):
         
         self.cardsByCost = self.create_cards_by_cost()
         
-        #self.allCardsBelow = {}
+        self.allCardsBelow = self.create_all_cards_below()
     
     def rem_one_card(self, cardName):
         """subtracts 1 card from cardName pile in deck
@@ -95,7 +95,14 @@ class Deck(object):
         return cardsByCost
         
     def create_all_cards_below(self):
-        pass
+        allCardsBelow = {i:[] for i in self.cardsByCost.keys()}
+        allCosts = sorted(self.cardsByCost.keys())
+        for i in range(len(allCosts)):
+            for j in allCosts[:i+1]:
+                allCardsBelow[allCosts[i]].append(self.cardsByCost[j])
+            #flatten list of lists
+            allCardsBelow[allCosts[i]] = reduce(lambda x,y: x+y, allCardsBelow[allCosts[i]])
+        return allCardsBelow
         
         
 #methods to create cards (avoid globals)
