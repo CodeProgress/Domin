@@ -1,4 +1,3 @@
-
 class Card(object):
     def __init__(self, name, cost, cardType, 
                  coinVal = 0, pointVal = 0, action = None
@@ -115,7 +114,7 @@ class Deck(object):
         return allCardsBelow
     
     def get_all_cards_below(self, numCoins):
-        if numCoins in self.allCardBelow:
+        if numCoins in self.allCardsBelow:
             return self.allCardsBelow[numCoins]
         if numCoins <= 0:
             return []
