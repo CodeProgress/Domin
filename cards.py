@@ -47,7 +47,10 @@ class Deck(object):
         self.deck[self.duchy.name]    = [numTreasure, self.duchy]
         self.deck[self.estate.name]   = [numTreasure, self.estate]
         
+        
         self.cardsByCost = self.create_cards_by_cost()
+
+        self.mostExpensiveCard = max(self.cardsByCost.keys())
         
         self.allCardsBelow = self.create_all_cards_below()
     
@@ -93,16 +96,31 @@ class Deck(object):
             else:
                 cardsByCost[card.cost] = [card.name]
         return cardsByCost
+    
+    def get_cards_by_cost(self, cost):
+        if cost in self.cardsByCost:
+            return self.cardsByCost[cost]
+        return []
         
     def create_all_cards_below(self):
-        allCardsBelow = {i:[] for i in self.cardsByCost.keys()}
-        allCosts = sorted(self.cardsByCost.keys())
-        for i in range(len(allCosts)):
+        """Precompute lists of all cards that can be bought"""
+        allCosts = range(self.mostExpensiveCard + 1)
+        allCardsBelow = {i:[] for i in allCosts}
+        
+        for i in allCosts:
             for j in allCosts[:i+1]:
-                allCardsBelow[allCosts[i]].append(self.cardsByCost[j])
+                allCardsBelow[i].append(self.get_cards_by_cost(j))
             #flatten list of lists
             allCardsBelow[allCosts[i]] = reduce(lambda x,y: x+y, allCardsBelow[allCosts[i]])
         return allCardsBelow
+    
+    def get_all_cards_below(self, numCoins):
+        if numCoins in self.allCardBelow:
+            return self.allCardsBelow[numCoins]
+        if numCoins <= 0:
+            return []
+        else:
+            self.allCardsBelow[self.mostExpensiveCard]
         
         
 #methods to create cards (avoid globals)
