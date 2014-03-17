@@ -26,7 +26,9 @@ class Game(object):
     
     def buy_phase(self, player):
         while player.numBuys > 0:
-            # availCards = #fast look up, possibly heapq
+            availCards = self.gameDeck.get_all_cards_below(player.numCoins) # key:price, value:card
+            print "You have {} coins".format(player.numCoins)
+            print "You can buy: {}".format(availCards)
             cardName = raw_input("Which card would you like to buy? ")
             cardName.lower()
             try:
@@ -52,10 +54,11 @@ class Game(object):
         self.clean_up(player)
 
     def is_end_of_game(self):
-        return self.gameDeck.get_card_count("province") == 0 \
+        return "province" not in self.gameDeck \
                 or self.gameDeck.numEmptyPiles >= 3
     
 
 domin = Game(2)
-domin.players[0].numCoins = 2
+domin.players[0].numCoins = 11
+domin.players[0].numBuys = 2
 domin.buy_phase(domin.players[0])
