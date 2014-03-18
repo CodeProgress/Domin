@@ -35,12 +35,12 @@ class Player(object):
     # discard_to_deck
     # 
     
-    def init_turn(self, numToDraw = 5):
+    def init_turn(self, numRandom = 5):
         try:
-            self.move_random_cards(self.deck, self.hand, numToDraw)
+            self.move_random_cards(self.deck, self.hand, numRandom)
         except:
-            self.move_all_cards(self.discard, self.deck, numToDraw)
-            self.move_random_cards(self.deck, self.hand, numToDraw)
+            self.move_all_cards(self.discard, self.deck)
+            self.move_random_cards(self.deck, self.hand, numRandom)
             
         self.numActions = 1
         self.numBuys    = 1
@@ -57,25 +57,28 @@ class Player(object):
         self.allCards[card.name] += 1
         self.numCoins -= card.cost
         self.numBuys -= 1
+
+    def cleanup(self):
+        self.move_all_cards(self.hand,   self.discard)
+        self.move_all_cards(self.played, self.discard)
     
-    def move_all_cards(fromPile, toPile):
+    def move_all_cards(self, fromPile, toPile):
         """Moves all cards from "fromPile" to "toPile"
         fromPile, toPile: collections.Coutner()
         """
         toPile.update(fromPile)
         fromPile.clear()
     
-    def move_random_cards(fromPile, toPile, numRandom):
-        """Moves all cards from "fromPile" to "toPile"
+    def move_random_cards(self, fromPile, toPile, numRandom):
+        """Moves numRandom cards from "fromPile" to "toPile"
         fromPile, toPile: collections.Coutner()
         """
         assert len(list(fromPile.elements())) >= numRandom
         for i in range(numRandom):
-            toMove = random.choice(fromPile.elements())
-            toPile.update(toMove)
-            fromPile.subtract(toMove)
+            elements = list(fromPile.elements())
+            toMove = random.choice(elements)
+            toPile.update([toMove])
+            fromPile.subtract([toMove])
     
-    def cleanup(self):
-        self.move_all_cards(self.hand,   self.discard)
-        self.move_all_cards(self.played, self.discard)
+
         
