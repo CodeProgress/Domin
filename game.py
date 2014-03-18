@@ -6,6 +6,7 @@ class Game(object):
         self.numPlayers = numPlayers
 
         startingDeck = ["estate"]*3 + ["copper"]*7
+
         self.players = []
         for i in range(numPlayers):
             self.players.append(player.Player("Player" + str(i), startingDeck))
@@ -19,12 +20,21 @@ class Game(object):
     def incr_player_to_move_next(self):
         self.player += 1
         self.player %= self.numPlayers
-        
+    
+    
+    def tally_coins(self, player):
+        total = 0
+        for card in player.played.elements():
+            total += self.gameDeck.get_card(card).coinVal
+        for card in player.hand.elements():
+            total += self.gameDeck.get_card(card).coinVal
+        player.numCoins = total
         
     def action_phase(self, player):
         pass
     
     def buy_phase(self, player):
+        self.tally_coins(player)
         while player.numBuys > 0:
             availCards = self.gameDeck.get_all_cards_below(player.numCoins) # key:price, value:card
             print "You have {} coins".format(player.numCoins)
@@ -51,7 +61,7 @@ class Game(object):
         player.init_turn()
         self.action_phase(player)
         self.buy_phase(player)
-        self.clean_up(player)
+        self.cleanup_phase(player)
 
     def is_end_of_game(self):
         return "province" not in self.gameDeck \
@@ -61,4 +71,4 @@ class Game(object):
 domin = Game(2)
 domin.players[0].numCoins = 11
 domin.players[0].numBuys = 2
-domin.buy_phase(domin.players[0])
+domin.turn(domin.players[0])
