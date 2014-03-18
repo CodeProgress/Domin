@@ -119,7 +119,7 @@ class Deck(object):
         if numCoins <= 0:
             return []
         else:
-            self.allCardsBelow[self.mostExpensiveCard]
+            return self.allCardsBelow[self.mostExpensiveCard]
         
         
 #methods to create cards (avoid globals)
