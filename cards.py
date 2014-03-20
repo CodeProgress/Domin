@@ -16,7 +16,7 @@ class Card(object):
         self.coinVal  = coinVal
         self.pointVal = pointVal
         self.action   = action     #function
-
+        
 
 class Deck(object):
     def __init__(self, numPlayers = 2):
@@ -46,6 +46,7 @@ class Deck(object):
         self.deck[self.duchy.name]    = [numTreasure, self.duchy]
         self.deck[self.estate.name]   = [numTreasure, self.estate]
         
+        self.origDeck = self.deck.copy()
         
         self.cardsByCost = self.create_cards_by_cost()
 
@@ -79,10 +80,10 @@ class Deck(object):
     def get_card(self, cardName):
         """Returns the card object
         cardName:  String
-        If cardName not in deck, raises NameError
+        If cardName not in origDeck, raises NameError
         """
-        if cardName in self.deck:
-            return self.deck[cardName][1]
+        if cardName in self.origDeck:
+            return self.origDeck[cardName][1]
         else:
             raise NameError("Card {} does not exist".format(cardName))
 
