@@ -18,8 +18,8 @@ class Game(object):
         #to be continued
     
     def incr_player_to_move_next(self):
-        self.player += 1
-        self.player %= self.numPlayers
+        self.playerToMoveNext += 1
+        self.playerToMoveNext %= self.numPlayers
     
     
     def tally_coins(self, player):
@@ -36,7 +36,8 @@ class Game(object):
     def buy_phase(self, player):
         self.tally_coins(player)
         while player.numBuys > 0:
-            availCards = self.gameDeck.get_all_cards_below(player.numCoins) # key:price, value:card
+            availCards = self.gameDeck.get_all_cards_below(player.numCoins)# key:price, value:card
+            print "It's your turn {}!".format(player.name)
             print "You have {} coins".format(player.numCoins)
             print "You can buy: {}".format(availCards)
             cardName = raw_input("Which card would you like to buy? ")
@@ -64,11 +65,31 @@ class Game(object):
         self.cleanup_phase(player)
 
     def is_end_of_game(self):
-        return "province" not in self.gameDeck \
+        return "province" not in self.gameDeck.deck \
                 or self.gameDeck.numEmptyPiles >= 3
+                
+    def play_game(self):
+        while not self.is_end_of_game():
+            player = self.players[self.playerToMoveNext]
+            self.turn(player)
+            self.incr_player_to_move_next()
+        self.verify_scores()
+        self.find_winner
+        
+    def verify_scores(self):
+        for player in self.players:
+            check = sum(card.pointVal for card in player.allCards.elements())
+            assert check == player.numPoints
+    
+    def find_winner(self):
+        scores = sorted((player.numPoints, player.name) for player in self.players)
+        return scores[-1]
     
 
 domin = Game(2)
-domin.players[0].numCoins = 11
-domin.players[0].numBuys = 2
-domin.turn(domin.players[0])
+#domin.players[0].numCoins = 11
+#domin.players[0].numBuys = 2
+#domin.turn(domin.players[0])
+
+domin.play_game()
+
