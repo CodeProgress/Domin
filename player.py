@@ -74,11 +74,10 @@ class Player(object):
         fromPile, toPile: collections.Coutner()
         """
         assert len(list(fromPile.elements())) >= numRandom
-        for i in range(numRandom):
-            elements = list(fromPile.elements())
-            toMove = random.choice(elements)
-            toPile.update([toMove])
-            fromPile.subtract([toMove])
+        elements = list(fromPile.elements())
+        toMove = random.sample(elements, numRandom)
+        toPile.update(toMove)
+        fromPile.subtract(toMove)
     
 
         
