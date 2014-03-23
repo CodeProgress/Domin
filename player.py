@@ -9,6 +9,7 @@ class Player(object):
         startingDeck: list of card names (Strings)
         """
         self.name  = name
+        self.isAI  = False
         
         #players hand will only contain references to the card object (its name)
         #collections.Counter() will be faster for calcing probabilities
@@ -79,5 +80,13 @@ class Player(object):
         toPile.update(toMove)
         fromPile.subtract(toMove)
     
-
+class AIPlayer(Player):
+    def __init__(self, name, startingDeck, strategy):
+        """strategy is a tuple (buyStrategy, actionStrategy)
+        buyStrategy, actionStrategy: functions
+        """
+        Player.__init__(self, name, startingDeck)
+        self.buyStrategy    = strategy[0]
+        self.actionStrategy = strategy[1]
+        self.isAI = True
         
