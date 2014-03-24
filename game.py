@@ -10,7 +10,6 @@ class Game(object):
             name: string
             strategy: tuple: (buyStrategy, actionStrategy)
         """
-        self.numPlayers = numPlayers
 
         startingDeck = ["estate"]*3 + ["copper"]*7
 
@@ -19,7 +18,11 @@ class Game(object):
             self.players.append(player.Player("Player" + str(i), startingDeck))
         
         for i in AIPlayers:
-            self.players.append(player.AIPlayer(i[0], i[1]))       
+            name = i[0]
+            strategy = i[1]
+            self.players.append(player.AIPlayer(name, startingDeck, strategy))       
+        
+        self.numPlayers = len(self.players)
         
         self.gameDeck = cards.Deck()
         
@@ -44,11 +47,12 @@ class Game(object):
         pass
     
     def buy_phase(self, player, verbose = False):
+        #consider making this more modular
         self.tally_coins(player)
         while player.numBuys > 0:
             
             if player.isAI:
-                cardName = player.buyStrategy
+                cardName = player.buyStrategy(player.numCoins)
             else:
                 availCards = []
                 for i in self.gameDeck.get_all_cards_below(player.numCoins):# key:price, value:card
@@ -104,18 +108,26 @@ class Game(object):
     def find_winner(self):
         scores = sorted((player.numPoints, player.name) for player in self.players)
         return scores
-        
-
-
-def sim_games(numGames = 1000, numPlayers = 3):
-    outcomes = []
-    for i in range(numGames):
-        domin = Game(numPlayers)
-        outcomes.append(domin.play_game())
     
-    print sorted(outcomes)[-1]
+    def reset_all(self, numPlayers, AIPlayers = []):
+        self.__init__(numPlayers, AIPlayers)
+    
 
-print sim_games()
+def sim_games(numGames = 1000, AIPlayers = []):
+    outcomes = []
+    domin = Game(0, AIPlayers)
+    for i in range(numGames):
+        outcomes.append(domin.play_game())
+        domin.reset_all(0, AIPlayers)
+    
+    sorted_outcomes = sorted(outcomes)
+    extremes = sorted_outcomes[-1], sorted_outcomes[0]
+    print extremes
 
-#cProfile.run('sim_games()')
+AIPlayers = [("Buy Provinces", (strategies.buy_only_prov, None)),
+             ("Buy Best Avail", (strategies.buy_best_avail, None))]
+
+#print sim_games(AIPlayers = AIPlayers)
+
+cProfile.run('sim_games(AIPlayers = AIPlayers)', sort = 'cumtime')
 
