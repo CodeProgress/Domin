@@ -2,6 +2,7 @@ import cards
 import player
 import cProfile
 import strategies
+#import pylab
 
 class Game(object):
     def __init__(self, numPlayers, AIPlayers = []):
@@ -120,14 +121,42 @@ def sim_games(numGames = 1000, AIPlayers = []):
         outcomes.append(domin.play_game())
         domin.reset_all(0, AIPlayers)
     
-    sorted_outcomes = sorted(outcomes)
-    extremes = sorted_outcomes[-1], sorted_outcomes[0]
-    print extremes
+    return outcomes
 
-AIPlayers = [("Buy Provinces", (strategies.buy_only_prov, None)),
-             ("Buy Best Avail", (strategies.buy_best_avail, None))]
+def count_wins(outcomes):
+    counter = {x[1]:0 for x in outcomes[0]}
+    numPlayers = len(outcomes[0])
+    
+    for game in outcomes:
+        
+        index = 0
+        toScore = numPlayers
+        counter[game[index][1]] += toScore
+        index += 1
+        while index < numPlayers:
+            if game[index][0] == game[index - 1][0]:
+                counter[game[index][1]] += toScore
+            else:
+                toScore -= 1
+                counter[game[index][1]] += toScore
+            index += 1
 
-#print sim_games(AIPlayers = AIPlayers)
+    return [(x, counter[x]) for x in sorted(counter,
+                                             reverse = True, 
+                                             key = lambda y: counter[y])]
+           
+           
+buyProvNotCopper      = ("Buy Prov (but not copper)", 
+                            (strategies.buy_only_prov_no_copper, None))      
+buyProv               = ("Buy Prov", (strategies.buy_only_prov, None))  
+buyBestAvailNotCopper = ("Buy Best Avail (but not copper)", 
+                            (strategies.buy_best_avail_no_copper, None))
+buyBestAvail          = ("Buy Best Avail", (strategies.buy_best_avail, None))
 
-cProfile.run('sim_games(AIPlayers = AIPlayers)', sort = 'cumtime')
+         
+AIPlayers = [buyProvNotCopper, buyProv, buyBestAvailNotCopper, buyBestAvail]
+
+print count_wins(sim_games(AIPlayers = AIPlayers))
+
+#cProfile.run('sim_games(AIPlayers = AIPlayers)', sort = 'cumtime')
 
