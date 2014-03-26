@@ -2,7 +2,7 @@ import cards
 import player
 import cProfile
 import strategies
-#import pylab
+import pylab
 
 class Game(object):
     def __init__(self, numPlayers, AIPlayers = []):
@@ -114,7 +114,7 @@ class Game(object):
         self.__init__(numPlayers, AIPlayers)
     
 
-def sim_games(numGames = 1000, AIPlayers = []):
+def sim_games(numGames = 100, AIPlayers = []):
     outcomes = []
     domin = Game(0, AIPlayers)
     for i in range(numGames):
@@ -124,6 +124,7 @@ def sim_games(numGames = 1000, AIPlayers = []):
     return outcomes
 
 def count_wins(outcomes):
+    """returns a list of reverse sorted tuples (score, strategy)"""
     counter = {x[1]:0 for x in outcomes[0]}
     numPlayers = len(outcomes[0])
     
@@ -145,18 +146,45 @@ def count_wins(outcomes):
                                              reverse = True, 
                                              key = lambda y: counter[y])]
            
-           
-buyProvNotCopper      = ("Buy Prov (but not copper)", 
-                            (strategies.buy_only_prov_no_copper, None))      
-buyProv               = ("Buy Prov", (strategies.buy_only_prov, None))  
-buyBestAvailNotCopper = ("Buy Best Avail (but not copper)", 
-                            (strategies.buy_best_avail_no_copper, None))
-buyBestAvail          = ("Buy Best Avail", (strategies.buy_best_avail, None))
 
-         
-AIPlayers = [buyProvNotCopper, buyProv, buyBestAvailNotCopper, buyBestAvail]
+def plot_outcomes(outcomes):
+    """plots the output from count_wins as a barchart"""
+    outcomes = zip(*outcomes)
+    players = outcomes[0]
+    results = outcomes[1]
+    numPlayers = len(players)
+    
+    x = range(numPlayers)
+    y = results
+    f = pylab.figure()
 
-print count_wins(sim_games(AIPlayers = AIPlayers))
+    ax = f.add_axes([0.1, 0.2, 0.8, 0.7])
+    ax.bar(x, y, align='center')
+    ax.set_xticks(x)
+    ax.set_xticklabels(players, rotation = 15)
+    
+    pylab.title("How did everyone do?")
+    pylab.ylabel("Number of Wins")
+    f.show()
 
-#cProfile.run('sim_games(AIPlayers = AIPlayers)', sort = 'cumtime')
+
+
+if __name__ == "__main__":
+    buyProvNotCopper      = ("Buy Prov (but not copper)", 
+                                (strategies.buy_only_prov_no_copper, None))      
+    buyProv               = ("Buy Prov", (strategies.buy_only_prov, None))  
+    buyBestAvailNotCopper = ("Buy Best Avail (but not copper)", 
+                                (strategies.buy_best_avail_no_copper, None))
+    buyBestAvail          = ("Buy Best Avail", (strategies.buy_best_avail, None))
+    
+            
+    AIPlayers = [buyProvNotCopper, buyProv, buyBestAvailNotCopper, buyBestAvail]
+    
+    allGames = sim_games(AIPlayers = AIPlayers)
+    
+    plot_outcomes(count_wins(allGames))
+    
+    #cProfile.run('sim_games(AIPlayers = AIPlayers)', sort = 'cumtime')
+
+
 
