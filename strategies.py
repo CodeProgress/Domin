@@ -35,6 +35,35 @@ def buy_only_prov_no_copper(numCoins):
         return "silver"
     return None
 
+def buy_only_duchy(numCoins):
+    """strategy where player only buys provinces if numCoins >= 8
+    otherwise, player buys the most valuable treasure card.
+    returns the card to buy (as String) if numCoins > 0, else returns None
+    """
+    
+    if numCoins >= 6:
+        return "gold"
+    if numCoins == 5:
+        return "duchy"
+    if numCoins >= 3:
+        return "silver"
+    if numCoins >= 1:
+        return "copper"
+    return None
+
+def buy_only_duchy_no_copper(numCoins):
+    """strategy where player only buys provinces if numCoins >= 8
+    otherwise, player buys the most valuable treasure card.
+    returns the card to buy (as String) if numCoins > 0, else returns None
+    """
+    
+    if numCoins >= 6:
+        return "gold"
+    if numCoins == 5:
+        return "duchy"
+    if numCoins >= 3:
+        return "silver"
+    return None
 
 def buy_best_avail(numCoins):
 
