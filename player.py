@@ -29,13 +29,6 @@ class Player(object):
         self.allCards    = collections.Counter(startingDeck)
         self.totalPoints = 0
     
-    # deck_to_hand
-    # hand_to_played
-    # hand_to_discard
-    # played_to_discard
-    # discard_to_deck
-    # 
-    
     def init_turn(self, numRandom = 5):
         try:
             self.move_random_cards(self.deck, self.hand, numRandom)
@@ -79,6 +72,11 @@ class Player(object):
         toMove = random.sample(elements, numRandom)
         toPile.update(toMove)
         fromPile.subtract(toMove)
+
+    def trash_card(self, card):
+        assert card in self.hand
+        self.hand.subtract(card)
+        self.allCards.subtract(card)
     
 class AIPlayer(Player):
     def __init__(self, name, startingDeck, strategy):
