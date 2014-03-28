@@ -174,13 +174,17 @@ def estate():
 #    """+$2, You may immediately put your deck into your discard pile"""
 #    pass
 #
-#def Village():
-#    """+1 Card; +2 Actions"""
-#    pass
-#
-#def Woodcutter():
-#    """+1 Buy; +$2"""
-#    pass
+def Village(game):
+    """+1 Card; +2 Actions"""
+    player = game.get_current_player()
+    player.move_random_cards(player.deck, player.hand, 1)
+    player.numActions += 1
+
+def Woodcutter(game):
+    """+1 Buy; +$2"""
+    player = game.get_current_player()
+    player.numBuys += 1
+    player.numCoins += 2
 #
 #def Workshop():
 #    """Gain a card costing up to $4"""
@@ -210,9 +214,10 @@ def estate():
 #    Gain a card costing up to $2 more than the trashed card"""
 #    pass
 #    
-#def Smithy():
-#    """+3 Cards"""
-#    pass
+def Smithy(game):
+    """+3 Cards"""
+    player = game.get_current_player()
+    player.move_random_cards(player.deck, player.hand, 3)
 #
 #def Spy():
 #    """+1 Card; +1 Action
@@ -236,24 +241,36 @@ def estate():
 #    Each other player draws a card"""
 #    pass
 #
-#def Festival():
-#    """+2 Actions, +1 Buy; +$2"""
-#    pass
-#
-#def Laboratory():
-#    """+2 Cards; +1 Action"""
-#    pass
+def Festival(game):
+    """+2 Actions, +1 Buy; +$2"""
+    player = game.get_current_player()
+    player.numActions += 2
+    player.numBuys += 1
+    player.numCoins += 2
+    
+
+def Laboratory(game):
+    """+2 Cards; +1 Action"""
+    player = game.get_current_player()
+    player.move_random_cards(player.deck, player.hand, 2)
+    player.numActions += 1
+
+
 #    
 #def Library():
 #    """Draw until you have 7 cards in hand. 
 #    You may set aside any Action cards drawn this way, as you draw them; 
 #    discard the set aside cards after you finish drawing"""
 #    pass
-#    
-#def Market():
-#    """+1 Card; +1 Action; +1 Buy; +$1"""
-#    pass
-#
+    
+def Market(game):
+    """+1 Card; +1 Action; +1 Buy; +$1"""
+    player = game.get_current_player()
+    player.move_random_cards(player.deck, player.hand, 1)
+    player.numActions += 1
+    player.numBuys += 1
+    player.numCoins += 1
+
 #def Mine():
 #    """Trash a Treasure card from your hand. 
 #    Gain a Treasure card costing up to $3 more; 
