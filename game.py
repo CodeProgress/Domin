@@ -35,6 +35,8 @@ class Game(object):
         self.playerToMoveNext += 1
         self.playerToMoveNext %= self.numPlayers
     
+    def get_current_player(self):
+        return self.players[self.playerToMoveNext]
     
     def tally_coins(self, player):
         total = 0
@@ -114,7 +116,7 @@ class Game(object):
         self.__init__(numPlayers, AIPlayers)
     
 
-def sim_games(numGames = 100, AIPlayers = []):
+def sim_games(numGames = 1000, AIPlayers = []):
     outcomes = []
     domin = Game(0, AIPlayers)
     for i in range(numGames):
@@ -165,6 +167,7 @@ def plot_outcomes(outcomes):
     
     pylab.title("How did everyone do?")
     pylab.ylabel("Number of Wins")
+
     f.show()
 
 
@@ -172,13 +175,16 @@ def plot_outcomes(outcomes):
 if __name__ == "__main__":
     buyProvNotCopper      = ("Buy Prov (but not copper)", 
                                 (strategies.buy_only_prov_no_copper, None))      
-    buyProv               = ("Buy Prov", (strategies.buy_only_prov, None))  
+    buyProv               = ("Buy Prov", (strategies.buy_only_prov, None))
+    buyDutchy             = ("Buy Duchy", (strategies.buy_only_duchy, None))
+    buyDutchyNotCopper      = ("Buy Duchy (but not copper)", 
+                                (strategies.buy_only_duchy_no_copper, None)) 
     buyBestAvailNotCopper = ("Buy Best Avail (but not copper)", 
                                 (strategies.buy_best_avail_no_copper, None))
     buyBestAvail          = ("Buy Best Avail", (strategies.buy_best_avail, None))
     
             
-    AIPlayers = [buyProvNotCopper, buyProv, buyBestAvailNotCopper, buyBestAvail]
+    AIPlayers = [buyProv, buyDutchy]
     
     allGames = sim_games(AIPlayers = AIPlayers)
     
