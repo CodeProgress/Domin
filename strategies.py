@@ -5,6 +5,8 @@
 #then in game, call the function
 #if strategy, return what strategy dictates, otherwise accept user input
 
+import random
+
 def buy_only_prov(numCoins):
     """strategy where player only buys provinces if numCoins >= 8
     otherwise, player buys the most valuable treasure card.
@@ -100,4 +102,8 @@ def action_trivial(actions):
     actions: list of action functions
     """
     pass
+    
+def rand_remaining_action_card(actions):
+    """returns a random action card from the player's hand"""
+    return random.choice(actions)
     
