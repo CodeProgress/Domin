@@ -46,8 +46,39 @@ class Game(object):
             total += self.gameDeck.get_card(card).coinVal
         player.numCoins = total
         
-    def action_phase(self, player):
+    def action_phase(self, player, verbose = False):
+        #When tallying actions, the tally only increases based on any bonuses of
+        #PLAYED cards.  Unplayed cards do not alter the total
         pass
+        
+#        while player.numActions > 0:
+#            player.numActions -= 1
+#
+#            if player.isAI:
+#                game = None #how to pass the game instance here...
+#                cardName = player.actionStrategy(game)
+#            else:
+#                availActions = [] # append action cards in player's hand
+#                if verbose: print "It's your turn {}!".format(player.name)
+#                print "You can play: {}".format(availActions)
+#                cardName = raw_input("Which card would you like to buy? ")
+#                cardName.lower()
+#
+#            if cardName in self.gameDeck.deck: 
+#                try:
+#                    card = self.gameDeck.get_card(cardName)
+#
+#                    card(game) #how to pass the game instance here... 
+#
+#                    self.gameDeck.rem_one_card(cardName)
+#                    if verbose: print "{} successfully played".format(cardName)
+#                except AssertionError:
+#                    print "Problem playing this card..."
+#                    break
+#            else:
+#                if verbose: print "{} is not in the deck".format(cardName)
+#                break
+            
     
     def buy_phase(self, player, verbose = False):
         #consider making this more modular
@@ -184,7 +215,7 @@ if __name__ == "__main__":
     buyBestAvail          = ("Buy Best Avail", (strategies.buy_best_avail, None))
     
             
-    AIPlayers = [buyProv, buyDutchy]
+    AIPlayers = [buyProv, buyDutchy, buyProvNotCopper]
     
     allGames = sim_games(AIPlayers = AIPlayers)
     
