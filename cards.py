@@ -1,3 +1,6 @@
+#need to find a way to pass the game information ro the action cards.
+#possivly using the game object, but should find another way...
+
 class Card(object):
     def __init__(self, name, cost, cardType, 
                  coinVal = 0, pointVal = 0, action = None
