@@ -1,5 +1,5 @@
-#need to find a way to pass the game information ro the action cards.
-#possivly using the game object, but should find another way...
+#need to find a way to pass the game information to the action cards.
+#possibly using the game object, but should find another way...
 
 class Card(object):
     def __init__(self, name, cost, cardType, 
@@ -239,11 +239,17 @@ def Smithy(game):
 #    """Choose an Action card in your hand. Play it twice"""
 #    pass
 #
-#def CouncilRoom():
-#    """+4 Cards; +1 Buy
-#    Each other player draws a card"""
-#    pass
-#
+
+def CouncilRoom(game):
+    """+4 Cards; +1 Buy
+    Each other player draws a card"""
+    player = game.get_current_player()
+    player.move_random_cards(player.deck, player.hand, 3)
+    player.numBuys += 1
+    for i in game.players:
+        if i != player:
+            i.move_random_cards(i.deck, i.hand, 1)
+
 def Festival(game):
     """+2 Actions, +1 Buy; +$2"""
     player = game.get_current_player()
